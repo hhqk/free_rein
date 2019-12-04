@@ -1,0 +1,29 @@
+线程池执行类ThreadPoolExecutor.java
+
+线程池解决两个不同的问题：
+提供在执行大量的异步任务时减少每个任务的调度开销以提高性能;
+提供一个限制和管理资源的方法，包括执行任务集合消耗的线程
+线程池还包括进行一些基础数据的统计，比如完成的任务数量
+
+为了能在上下文使用，这个类提供了许多可调节的参数和可扩展的钩子方法
+但是，程序员在一些常见的场景中直接使用Executors类中的预配置参数的线程池工厂方法
+Executors#newCachedThreadPool(无限线程池，自动回收线程) --> 浪费资源？
+Executors#newFixedThreadPool(固定大小的线程池) --> remark
+Executors#newSingleThreadExecutor(单例模式的线程池) --> remark
+
+然而在使用ThreadPoolExecutor类时，可以根据下列指导进行手动配置参数调优此类：
+1.core and maximum pool sizes 线程池基础大小和最大线程池的大小
+ThreadPoolExecutor根据设定的线程池基础大小和最大线程池的大小之间会自动调节线程池的大小
+当一个任务通过ThreadPoolExecutor.execute(Runnable)方法添加到线程时
+线程池中运行的线程小于线程池基础的大小，即使线程池中的线程处于空闲状态，也要添加新的线程进行处理这个任务请求
+线程池中运行的线程大于线程池基础的大小、小于最大线程池的大小，以及队列是满的，就会添加新的线程进行处理这个任务请求
+将corePoolSize和maximumPoolSize设置为一样时，可以创建一个固定大小的线程池
+将maximumPoolSize设置成一个数据的最大值，例如Integer.MAX_VALUE，这就意味着线程池可以容纳任意数量的并发任务
+最典型的设置是，corePoolSize和maximumPoolSize可以在构造器中进行提前设置，通过setCorePoolSize和setMaximumPoolSize进行改变参数设置
+2.on-demand construction 各种构造器
+3.creating new threads 创建线程
+4.keep-alive times 存活时间
+5.queuing 队列
+6.hook methods 钩子方法
+7.queue maintenance 队列维护
+8.finalization 销毁
