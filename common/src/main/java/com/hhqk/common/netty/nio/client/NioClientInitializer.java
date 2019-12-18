@@ -1,4 +1,4 @@
-package com.hhqk.common.nio.server;
+package com.hhqk.common.netty.nio.client;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -9,7 +9,7 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.util.CharsetUtil;
 
-public class NioServerInitializer extends ChannelInitializer<SocketChannel> {
+public class NioClientInitializer extends ChannelInitializer<SocketChannel> {
 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
@@ -20,6 +20,6 @@ public class NioServerInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast("stringDecoder", new StringDecoder(CharsetUtil.UTF_8));
         pipeline.addLast("stringEncoder", new StringEncoder(CharsetUtil.UTF_8));
 
-        pipeline.addLast("myServerHandler", new NioServerHandler());  //自定义
+        pipeline.addLast(new NioClientHandler());
     }
 }

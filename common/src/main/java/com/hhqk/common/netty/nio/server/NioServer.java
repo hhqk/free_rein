@@ -1,4 +1,4 @@
-package com.hhqk.common.nio.server;
+package com.hhqk.common.netty.nio.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -8,11 +8,18 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class NioServer {
 
+    private int port = 8899;
+
     public NioServer () {
 
     }
 
-    public void init() {
+    public NioServer (int port) {
+        this.port = port;
+        init();
+    }
+
+    private void init() {
         //
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         //
@@ -22,13 +29,14 @@ public class NioServer {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(new NioServerInitializer());  //自定义
+                    .childHandler(new NioServerInitializer());  // 自定义I/O处理事件,记录日志，对消息进行编解码等
 
-            ChannelFuture channelFuture = serverBootstrap.bind(8899);
-            channelFuture.channel().closeFuture().sync();
+            ChannelFuture channelFuture = serverBootstrap.bind(port).sync(); // 绑定监听端口
+            channelFuture.channel().closeFuture().sync(); // 等待服务器监听端口关闭
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
+            // 释放线程池资源
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
