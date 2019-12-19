@@ -8,18 +8,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class NioServer {
 
-    private int port = 8899;
-
-    public NioServer () {
-
-    }
-
-    public NioServer (int port) {
-        this.port = port;
-        init();
-    }
-
-    private void init() {
+    public void init(int port) {
         //
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         //
